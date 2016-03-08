@@ -1,0 +1,56 @@
+{
+    "finspec": "0.1",
+    "info": {
+        "version": "4.2-20160111",
+        "issueDate": "2015-01-11",
+        "liveDate": "2015-02-01",
+        "issuer": "NASDAQ",
+        "title": "OUCH Version 4.2",
+        "contacts": [
+            {
+                "name": "Trading Services",
+                "email": "tradingservices@nasdaqomx.com",
+                "url": "http://nasdaqtrader.com/Trader.aspx?id=TradingSpecs"
+            }
+        ]
+    },
+    "protocol": "ouch",
+    "protocolVersion": "4.2",
+    "sessionMessages": [
+        {
+            "name": "Debug",
+            "wireId": "+",
+            "direction": "both",
+            "description": "A debug packet can be sent by either side of a SoupBinTCP connection at anytime. Debug packets are intended to provide human readable text that may aid in debugging problems. Debug Packets should be ignored by both client and server application software.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16",
+                    "description": "Number of bytes after this field until the next packet"                    
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "FIXME": "this is ugly",
+                            "enum": "+",
+                            "description": "Debug Packet (+)"
+                        }
+                    ]
+                },
+                {
+                    "position": 3,
+                    "name": "Text",
+                    "type": "string",
+                    "length": "FIXME"
+                }
+            ]
+        }
+    ]
+}
