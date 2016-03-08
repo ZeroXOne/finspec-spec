@@ -51,6 +51,33 @@
                     "length": "FIXME"
                 }
             ]
+        },
+        {
+            "name": "Login Accepted"
+        },
+        {
+            "name": "Login Rejected"
+        },
+        {
+            "name": "Sequenced Data"
+        },
+        {
+            "name": "Server Heartbeat"
+        },
+        {
+            "name": "End of Session"
+        },
+        {
+            "name": "Login Request"
+        },
+        {
+            "name": "Unsequenced Data"
+        },
+        {
+            "name": "Client Heartbeat"
+        },
+        {
+            "name": "Logout Request"
         }
     ]
 }
