@@ -54,9 +54,97 @@
         },
         {
             "name": "Login Accepted"
+            "wireId": "A",
+            "direction": "out",
+            "description": "The SoupBinTCP server sends a Login Accepted Packet in response to receiving a valid Login Request from the client. This packet will always be the first non-debug packet sent by the server after a successful login request.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16",
+                    "description": "Number of bytes after this field until the next packet",
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "FIXME": "ugly",
+                            "enum": "A",
+                            "description": "Login Accepted (A)"
+                        }
+                    ],
+                    "description": "Login Accepted Packet"
+                },
+                {
+                    "position": 3,
+                    "length": 10,
+                    "name": "Session",
+                    "type": "string",
+                    "description": "The session ID of the session that is now logged into. Left padded with spaces.",
+                    "FIXME": "padding spec"
+                },
+                {
+                    "position": 13,
+                    "length": 20,
+                    "name": "Sequence Number",
+                    "type": "string",
+                    "format": "FIXME",
+                    "description": "The sequence number in ASCII of the next Sequenced Message to be sent. Left padded with spaces.",
+                    "FIXME": "padding spec"
+                }
+            ]
         },
         {
             "name": "Login Rejected"
+            "wireId": "J",
+            "direction": "out",
+            "description": "The SoupBinTCP server sends this packet in response to an invalid Login Request Packet from the client. The server closes the socket connection after sending the Login Reject Packet. The Login Rejected Packet will be the only non-debug packet sent by the server in the case of an unsuccessful login attempt.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16",
+                    "description": "Number of bytes after this field until the next packet",
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "FIXME": "ugly",
+                            "enum": "J",
+                            "description": "Login Rejected (J)"
+                        }
+                    ],
+                    "description": "Login Rejected Packet"
+                },
+                {
+                    "position": 3,
+                    "length": 1,
+                    "name": "Reject Reason Code",
+                    "type": "char",
+                    "description": "",
+                    "values": [
+                        {
+                            "enum": "A",
+                            "description": "Not Authorized. There was an invalid username and password combination in the Login Request Message."
+                        },
+                        {
+                            "enum": "S",
+                            "description": "Session not available. The Requested Session in the Login Request Packet was either invalid or not available."
+                        }
+                    ]
+                },
+            ]
         },
         {
             "name": "Sequenced Data"
