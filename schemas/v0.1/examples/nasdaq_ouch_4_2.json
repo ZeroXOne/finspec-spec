@@ -151,9 +151,63 @@
         },
         {
             "name": "Server Heartbeat"
+            "wireId": "H",
+            "direction": "in",
+            "description": "The server should send a Server Heartbeat Packet anytime more than 1 second passes where no data has been sent to the client. The client can then assume that the link is lost if it does not receive anything for an extended period of time.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16",  /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            /* FIXME: need better way to do this */
+                            "enum": "H",
+                            "description": "Server Heartbeat (H)"
+                        }
+                    ],
+                    "description": "Server Heartbeat Packet"
+                }
+            ]
         },
         {
             "name": "End of Session"
+            "wireId": "Z",
+            "direction": "in",
+            "description": "The server will send an End of Session Packet to denote that the current session is finished. The connection will be closed shortly after this packet, and the user will no longer be able to reconnect to the current session.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16", /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            /* FIXME: need a better way to do this */
+                            "enum": "Z",
+                            "description": "End of Session (Z)"
+                        }
+                    ],
+                    "description": "End of Session Packet"
+                }
+            ]
         },
         {
             "name": "Login Request"
