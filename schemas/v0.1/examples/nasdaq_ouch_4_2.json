@@ -210,7 +210,66 @@
             ]
         },
         {
-            "name": "Login Request"
+            "name": "Login Request",
+            "wireId": "L",
+            "direction": "out",
+            "description": "The SoupBinTCP client must send a Login Request Packet immediately upon establishing a new TCP/IP socket connection to the server.
+Client and server must have mutually agreed upon the username and password fields. They provide simple authentication to prevent a client from inadvertently connecting to the wrong server.
+Both Username and Password are case-insensitive and should be padded on the right with spaces.
+The server can terminate an incoming TCP/IP socket if it does not receive a Login Request Packet within a reasonable period of time (typically 30 seconds).",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16", /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "L",
+                            "description": "Login Request (L)"
+                        }
+                    ],
+                    "description": "Login Request Packet"
+                },
+                {
+                    "position": 3,
+                    "length": 6,
+                    "name": "Username",
+                    "type": "string",
+                    "description": "Username"
+                },
+                {
+                    "position": 9,
+                    "length": 10,
+                    "name": "Password",
+                    "type": "string",
+                    "description": "Password"
+                },
+                {
+                    "position": 19,
+                    "length": 10,
+                    "name": "Requested Session",
+                    "type": "string",
+                    "description": "Specifies the session the client would like to log into, or all blanks to log into the currently active session."
+                },
+                {
+                    "position": 29,
+                    "length": 20,
+                    "name": "Requested Sequence Number",
+                    "type": "string",
+                    /* FIXME: semantic type "integer" would be good here */
+                    "description": "Specifies the next sequence number in ASCII the client wants to receive upon connection, or 0 to start receiving the most recently generated message."
+                    
+                },
+            ]
         },
         {
             "name": "Unsequenced Data"
