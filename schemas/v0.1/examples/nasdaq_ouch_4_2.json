@@ -267,12 +267,276 @@ The server can terminate an incoming TCP/IP socket if it does not receive a Logi
                     "type": "string",
                     /* FIXME: semantic type "integer" would be good here */
                     "description": "Specifies the next sequence number in ASCII the client wants to receive upon connection, or 0 to start receiving the most recently generated message."
-                    
                 },
             ]
         },
         {
-            "name": "Unsequenced Data"
+            "name": "Enter Order",
+            "wireId": "SO",
+            "direction": "out",
+            "description": "The Enter Order Message lets you enter a new order into NASDAQ.
+Each new order must have an Order Token that is unique for that day and that logical OUCH account. If you send a valid order, you should receive an acknowledgement as an Accepted Message or an Atomically Accepted and Canceled Message. If you send an Enter Order Message with a previously used Order Token, the new order will be ignored.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16", /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            /* FIXME: need better way to do this */
+                            "enum": "S",
+                            "description": "Sequenced Data (S)"
+                        }
+                    ],
+                    "description": "Sequenced Data Packet"
+                },
+                {
+                    "position": 3,
+                    "length", 1,
+                    "name": "Message Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "O",
+                            "description": "Enter Order (O)"
+                        }
+                    ],
+                    "description": "Enter Order Message"
+                },
+                {
+                    "position": 4,
+                    "length": 14,
+                    "name": "Order Token",
+                    "type": "string",
+                    "description": "As described above in Data Types. You can put any information you like. Token must be day- unique for each OUCH account."
+                },
+                {
+                    "position": 15,
+                    "length": 1,
+                    "name": "Buy/Sell Indicator",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "B",
+                            "description": "Buy order"
+                        },
+                        {
+                            "enum": "S",
+                            "description": "Sell order"
+                        },
+                        {
+                            "enum": "T",
+                            "description": "Sell short, client affirms ability to borrow
+securities in good deliverable form for
+delivery within three business days"
+                        },
+                        {
+                            "enum": "E",
+                            "description": "Sell short exempt, client affirms ability to
+borrow securities in good deliverable form for delivery within three business days"
+                        }
+                    ]
+                },
+                {
+                    "position": 16,
+                    "length": 4,
+                    "name": "Shares",
+                    "type": "integer",
+                    "format": "uInt32", /* FIXME: big-endian */
+                    /* FIXME: "maximum": 1000000, */
+                    /* FIXME: "exclusiveMaximum": "false", */
+                    "description": "Total number of shares. Must be greater than zero and less than 1,000,000"
+                },
+                {
+                    "position": 20,
+                    "length": 8,
+                    "name": "Stock",
+                    "type": "string",
+                    "description": "Stock symbol"
+                },
+                {
+                    "position": 28,
+                    "length": 4,
+                    "name": "Price",
+                    "type": "integer",
+                    "format": "uInt32", /* FIXME: OUCH price type? */
+                    "description": "The price of the order."
+                },
+                {
+                    "position": 32,
+                    "length": 4,
+                    "name": "Time in Force",
+                    "type": "integer",
+                    "format": "uInt32", /* FIXME: OUCH TIF */
+                    "description": "The number of seconds that this order should live before being automatically canceled."
+                },
+                {
+                    "position": 36,
+                    "length": 4
+                    "name": "Firm",
+                    "type": "string",
+                    "description": "This field should contain all caps. Firm Identifier for the order entry firm. One logical OUCH Account can potentially enter orders for multiple firms in a Service Bureau Functionality that is not available will be greyed out in the specifications. Any changes will be conveyed via the NASDAQ OMX Head Trader Alerts or Technical Updates.
+configuration. If this field is blank-filled, the default firm for the OUCH Account will be used."
+                }
+                {
+                    "position": 40,
+                    "length": 1,
+                    "name": "Display",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "A",
+                            "description": "Attributable-Price to Display"
+                        },
+                        {
+                            "enum": "Y",
+                            "description": "Attributable-Price to Comply"
+                        },
+                        {
+                            "enum": "N",
+                            "description": "Non-Display"
+                        },
+                        {
+                            "enum": "I",
+                            "description": "Imbalance-Only (for opening and closing cross only)"
+                        },
+                        {
+                            "enum": "M",
+                            "description": "Mid-point Peg"
+                        },
+                        {
+                            "enum": "W",
+                            "description": "Mid-point Peg Post Only"
+                        },
+                        {
+                            "enum": "L",
+                            "description": "Post-Only and Attributeable - Price to Display"
+                        },
+                        {
+                            "enum": "O",
+                            "description": "Retail Order Type 1"
+                        },
+                        {
+                            "enum": "T",
+                            "description": "Retail Order Type 2"
+                        },
+                        {
+                            "enum": "Q",
+                            "description": "Retail Price Improvement Order"
+                        }
+                    ],
+                    "description": "Display instructions"
+                },
+                {
+                    "position": 41,
+                    "length": 1,
+                    "name": "Capacity",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "A",
+                            "description": "Agency"
+                        },
+                        {
+                            "enum": "P",
+                            "description": "Principal"
+                        },
+                        {
+                            "enum": "R",
+                            "description": "Riskless"
+                        }
+                    ],
+                    "description": "Order capacity. Values other than 'A', 'P' or 'R' will be converted to 'O'"
+                },
+                {
+                    "position": 42,
+                    "length:" 1,
+                    "name": "Intermarket Sweep Eligibility",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "Y",
+                            "description": "Eligible"
+                        },
+                        {
+                            "enum": "N",
+                            "description": "Not eligible"
+                        }
+                    ],
+                    "description": "Intermarket sweep eligibility"
+                },
+                {
+                    "position": 43,
+                    "length": 4,
+                    "name": "Minimum Quantity",
+                    "type": "integer",
+                    "format": "uInt32", /* FIXME: big-endian */
+                    "description": "Specifies the minimum acceptable quantity to execute"
+                },
+                {
+                    "position": 47,
+                    "length": 1,
+                    "name": "Cross Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "enum": "N",
+                            "description": "No corss (continuous market)"
+                        },
+                        {
+                            "enum": "O",
+                            "description": "Opening cross"
+                        },
+                        {
+                            "enum": "C",
+                            "description": "Closing cross"
+                        },
+                        {
+                            "enum": "H",
+                            "description": "Halt/IPO cross (must be market price)"
+                        },
+                        {
+                            "enum": "S",
+                            "description": "Supplemental order"
+                        },
+                        {
+                            "enum": "R",
+                            "description": "Retail order"
+                        }
+                    ],
+                    "description": "Cross type"
+                },
+                {
+                    "position": 48,
+                    "length": 1,
+                    "name": "Customer Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            "emum": "R",
+                            "description": "Retail designated order"
+                        },
+                        {
+                            "enum": "N",
+                            "description": "Not a retail designated order"
+                        },
+                        {
+                            "enum": " ",
+                            "description": "Use the default configure on the port for your firm"
+                        }
+                    ],
+                    "description": "Indicates if the order is a retail designated order (optional field)"
+                }
+            ]
         },
         {
             "name": "Client Heartbeat"
