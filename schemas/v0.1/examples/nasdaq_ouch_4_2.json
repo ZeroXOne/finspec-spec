@@ -276,9 +276,63 @@ The server can terminate an incoming TCP/IP socket if it does not receive a Logi
         },
         {
             "name": "Client Heartbeat"
+            "wireId": "R",
+            "direction": "out",
+            "description": "The client should send a Client Heartbeat Packet anytime more than 1 second passes where no data has been sent to the server. The server can then assume that the link is lost if it does not receive anything for an extended period of time.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16", /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            /* FIXME: need better way to do this */
+                            "enum": "R",
+                            "description": "Client Heartbeat (R)"
+                        }
+                    ],
+                    "description": "Client Heartbeat Packet"
+                }
+            ]
         },
         {
-            "name": "Logout Request"
+            "name": "Logout Request",
+            "wireId": "O",
+            "direction": "out",
+            "description": "The client may send a Logout Request Packet to request the connection be terminated. Upon receiving a Logout Request Packet, the server will immediately terminate the connection and close the associated TCP/IP socket.",
+            "fields": [
+                {
+                    "position": 0,
+                    "length": 2,
+                    "name": "Packet Length",
+                    "type": "integer",
+                    "format": "uInt16", /* FIXME: endian */
+                    "description": "Number of bytes after this field until the next packet"
+                },
+                {
+                    "position": 2,
+                    "length": 1,
+                    "name": "Packet Type",
+                    "type": "char",
+                    "values": [
+                        {
+                            /* FIXME: need better way to do this */
+                            "enum": "O",
+                            "description": "Logout Request (O)"
+                        }
+                    ],
+                    "description": "Logout Request Packet"
+                }
+            ]
         }
     ]
 }
